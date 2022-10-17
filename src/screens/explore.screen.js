@@ -21,17 +21,13 @@ const filterData = [{ label: 'Top 1', value: 1 }, { label: 'Top 10', value: 10 }
 
 const ExploreScreen = () => {
   const [perPage, setPerPage] = useState(10)
-
   const {
     data: repositories,
-    isLoading
+    isLoading,
+    isFetching
   } = useGetRepoSortedByStarsQuery(perPage)
-  console.log("🚀 ~ file: explore.screen.js ~ line 30 ~ ExploreScreen ~ isLoading", isLoading)
-
-  console.log("datttttttttta", repositories)
-
-
-
+  console.log("🚀 ~ file: explore.screen.js ~ line 28 ~ ExploreScreen ~ isLoading", isLoading)
+  console.log("🚀 ~ file: explore.screen.js ~ line 28 ~ ExploreScreen ~ repositories", repositories)
   return (
     <SafeAreaView style={styles.list__container}>
       <Text style={styles.title}>Explore Popular</Text>
@@ -41,7 +37,7 @@ const ExploreScreen = () => {
 
         }} label="View :" initialVal="Top 10" />
 
-        {isLoading ? <ActivityIndicator /> :
+        {isLoading || isFetching ? <ActivityIndicator /> :
           !repositories ? <EmptyScreen /> :
             <FlatList
               style={{ marginVertical: 15 }}
@@ -51,7 +47,6 @@ const ExploreScreen = () => {
               />}
               keyExtractor={(item) => item.id}
             />
-
         }
       </View>
     </SafeAreaView>
