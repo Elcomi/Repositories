@@ -24,9 +24,9 @@ const ExploreScreen = () => {
 
   const {
     data: repositories,
-    isLoading,
-    isSuccess
+    isLoading
   } = useGetRepoSortedByStarsQuery(perPage)
+  console.log("🚀 ~ file: explore.screen.js ~ line 30 ~ ExploreScreen ~ isLoading", isLoading)
 
   console.log("datttttttttta", repositories)
 
@@ -42,7 +42,7 @@ const ExploreScreen = () => {
         }} label="View :" initialVal="Top 10" />
 
         {isLoading ? <ActivityIndicator /> :
-          repositories && isSuccess ?
+          !repositories ? <EmptyScreen /> :
             <FlatList
               style={{ marginVertical: 15 }}
               data={repositories.items}
@@ -50,7 +50,7 @@ const ExploreScreen = () => {
                 repository={item}
               />}
               keyExtractor={(item) => item.id}
-            /> : <EmptyScreen />
+            />
 
         }
       </View>
