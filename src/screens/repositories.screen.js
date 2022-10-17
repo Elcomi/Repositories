@@ -30,7 +30,8 @@ const RepositoriesScreen = () => {
 
   const {
     data: repositories,
-    isLoading
+    isLoading,
+    isFetching
   } = useGetReposWithFiltersQuery({ date, language })
 
   const languages = ["C", "go", "Java", "JavaScript", "PHP", "Python", "Ruby", "Scala", "TypeScript"]
@@ -86,7 +87,7 @@ const RepositoriesScreen = () => {
           onCancel={hideDatePicker}
         />
       </View>
-      {isLoading ? <ActivityIndicator /> :
+      {isLoading || isFetching ? <ActivityIndicator /> :
         !repositories ?
           <EmptyScreen /> :
           <FlatList
