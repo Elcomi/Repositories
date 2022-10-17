@@ -9,7 +9,7 @@ export const repositoriesApi = createApi({
       query: (perPage) => `search/repositories?q=created:%3E2019-01-10&sort=stars&order=desc&per_page=${perPage}&page=1`,
     }),
     getReposWithFilters: builder.query({
-      query: (date, language) => `search/repositories?q=created:%3E${date || "2019-01-10"}${language ? `+language:${language}` : ""}&order=desc`,
+      query: ({ date, language }) => `search/repositories?q=created:%3E${date || "2019-01-10"}${language ? `+language:${language}` : ""}&order=desc`,
     })
   }),
 })

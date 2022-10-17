@@ -31,7 +31,7 @@ const RepositoriesScreen = () => {
   const {
     data: repositories,
     isLoading
-  } = useGetReposWithFiltersQuery(date, language)
+  } = useGetReposWithFiltersQuery({ date, language })
 
   const languages = ["C", "go", "Java", "JavaScript", "PHP", "Python", "Ruby", "Scala", "TypeScript"]
 
