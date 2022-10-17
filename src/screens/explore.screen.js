@@ -9,8 +9,10 @@ import {
   ActivityIndicator,
 } from "react-native";
 
+
+import { useGetRepoSortedByStarsQuery } from '../features/api/apiSlice'
+
 import RepoCard from "../components/reopsCard/index"
-import { useGetReposSortedByStars } from "../services/repository.services"
 import Selector from "../components/selector";
 import EmptyScreen from "../components/emptyScreen";
 
@@ -19,7 +21,15 @@ const filterData = [{ label: 'Top 1', value: 1 }, { label: 'Top 10', value: 10 }
 
 const ExploreScreen = () => {
   const [perPage, setPerPage] = useState(10)
-  const { data, isLoading } = useGetReposSortedByStars({ perPage })
+
+  const {
+    data: repositories,
+    isLoading,
+    isSuccess
+  } = useGetRepoSortedByStarsQuery(perPage)
+
+  console.log("datttttttttta", repositories)
+
 
 
   return (
@@ -32,21 +42,19 @@ const ExploreScreen = () => {
         }} label="View :" initialVal="Top 10" />
 
         {isLoading ? <ActivityIndicator /> :
-          !data ?
-            <EmptyScreen /> :
+          repositories && isSuccess ?
             <FlatList
               style={{ marginVertical: 15 }}
-              data={data}
+              data={repositories.items}
               renderItem={({ item }) => <RepoCard type="explore"
                 repository={item}
               />}
               keyExtractor={(item) => item.id}
-            />}
+            /> : <EmptyScreen />
+
+        }
       </View>
-
-
     </SafeAreaView>
-
   )
 }
 

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   View,
@@ -12,9 +12,8 @@ import moment from 'moment';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-
 import RepoCard from "../components/reopsCard/index"
-import { useGetReposWithFilters } from "../services/repository.services"
+import { useGetReposWithFiltersQuery } from '../features/api/apiSlice'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { colors } from "../theme/colors"
 import Selector from "../components/selector"
@@ -25,12 +24,14 @@ import EmptyScreen from "../components/emptyScreen"
 
 const RepositoriesScreen = () => {
 
-  const [date, setDate] = useState("");
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [date, setDate] = useState("");
   const [language, setLanguage] = useState("")
-  const { data, isLoading } = useGetReposWithFilters({ date, language })
 
-
+  const {
+    data: repositories,
+    isLoading
+  } = useGetReposWithFiltersQuery(language, date)
 
   const languages = ["C", "go", "Java", "JavaScript", "PHP", "Python", "Ruby", "Scala", "TypeScript"]
 
@@ -44,7 +45,6 @@ const RepositoriesScreen = () => {
   };
 
   const handleConfirm = (date) => {
-    console.warn("A date has been picked: ", date);
     setDate(moment(date).format('YYYY-MM-DD'))
     hideDatePicker();
   };
@@ -61,8 +61,6 @@ const RepositoriesScreen = () => {
           items={languages}
           setValue={setLanguage}
           isSearchExist
-        // selectedItem={selectedItem}
-
         />
         <TouchableWithoutFeedback
           onPress={showDatePicker}>
@@ -89,11 +87,11 @@ const RepositoriesScreen = () => {
         />
       </View>
       {isLoading ? <ActivityIndicator /> :
-        !data ?
+        !repositories ?
           <EmptyScreen /> :
           <FlatList
             style={{ marginVertical: -15 }}
-            data={data}
+            data={repositories.items}
             renderItem={({ item }) => <RepoCard type="repositories" repository={item} />}
             keyExtractor={(item) => item.id}
 
